@@ -1,60 +1,137 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Register — Bus Ticket</title>
+    <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:Arial, sans-serif; background:#f5f5f5; display:flex; justify-content:center; align-items:center; min-height:100vh; }
-        .card { background:#fff; border-radius:8px; border:1px solid #ddd; padding:32px; width:100%; max-width:400px; }
-        h2 { margin-bottom:24px; color:#1a1a2e; }
-        .form-group { margin-bottom:14px; }
-        .form-group label { display:block; margin-bottom:4px; font-size:13px; font-weight:bold; }
-        .form-group input { width:100%; padding:8px 12px; border:1px solid #ccc; border-radius:6px; font-size:14px; }
-        .btn { display:block; width:100%; padding:10px; background:#1a1a2e; color:#fff; border:none; border-radius:6px; font-size:14px; cursor:pointer; }
-        .alert-error { background:#f8d7da; color:#721c24; padding:10px 14px; border-radius:6px; margin-bottom:16px; font-size:13px; }
-        p { margin-top:16px; font-size:13px; text-align:center; }
-        a { color:#1a1a2e; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+        }
+
+        .auth-card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,.15);
+        }
+
+        .auth-header {
+            color: #1e3a8a;
+            font-weight: 700;
+        }
+
+        .btn-register {
+            background-color: #1e3a8a;
+            border: none;
+        }
+
+        .btn-register:hover {
+            background-color: #1d4ed8;
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2>🚌 Daftar Akun</h2>
 
-        @if ($errors->any())
-            <div class="alert-error">
-                @foreach ($errors->all() as $error)
-                    <div>{{ $error }}</div>
-                @endforeach
-            </div>
-        @endif
+    <div class="container">
+        <div class="row justify-content-center align-items-center min-vh-100">
 
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
-            <div class="form-group">
-                <label>Nama Lengkap</label>
-                <input type="text" name="name" value="{{ old('name') }}" required autofocus>
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" value="{{ old('email') }}" required>
-            </div>
-            <div class="form-group">
-                <label>No. HP</label>
-                <input type="text" name="phone" value="{{ old('phone') }}" required>
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" required>
-            </div>
-            <div class="form-group">
-                <label>Konfirmasi Password</label>
-                <input type="password" name="password_confirmation" required>
-            </div>
-            <button type="submit" class="btn">Daftar</button>
-        </form>
+            <div class="col-md-6 col-lg-5">
 
-        <p>Sudah punya akun? <a href="{{ route('login') }}">Login di sini</a></p>
+                <div class="card auth-card">
+                    <div class="card-body p-4">
+
+                        <div class="text-center mb-4">
+                            <h3 class="auth-header mb-1">Bus Ticket</h3>
+                            <p class="text-muted">Buat akun baru</p>
+                        </div>
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul class="mb-0 ps-3">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <form method="POST" action="{{ route('register') }}">
+                            @csrf
+
+                            <div class="mb-3">
+                                <label class="form-label">Nama Lengkap</label>
+
+                                <input type="text"
+                                    name="name"
+                                    class="form-control form-control-lg"
+                                    value="{{ old('name') }}"
+                                    required
+                                    autofocus>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+
+                                <input type="email"
+                                    name="email"
+                                    class="form-control form-control-lg"
+                                    value="{{ old('email') }}"
+                                    required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">No. HP</label>
+
+                                <input type="text"
+                                    name="phone"
+                                    class="form-control form-control-lg"
+                                    value="{{ old('phone') }}"
+                                    required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+
+                                <input type="password"
+                                    name="password"
+                                    class="form-control form-control-lg"
+                                    required>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Konfirmasi Password</label>
+
+                                <input type="password"
+                                    name="password_confirmation"
+                                    class="form-control form-control-lg"
+                                    required>
+                            </div>
+
+                            <button type="submit"
+                                    class="btn btn-register btn-lg text-white w-100">
+                                Daftar
+                            </button>
+                        </form>
+
+                        <p class="text-center mt-4 mb-0">
+                            Sudah punya akun?
+                            <a href="{{ route('login') }}"
+                            class="text-decoration-none fw-semibold">
+                                Login di sini
+                            </a>
+                        </p>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
     </div>
+
+    <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>
