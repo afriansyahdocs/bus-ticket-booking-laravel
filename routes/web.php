@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,4 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/create/{schedule}', [OrderController::class, 'create'])->name('orders.create');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+
+    // Payment
+    Route::get('/orders/{order}/payment', [PaymentController::class, 'show'])->name('payment.show');
+    Route::post('/orders/{order}/payment', [PaymentController::class, 'confirm'])->name('payment.confirm');
 });

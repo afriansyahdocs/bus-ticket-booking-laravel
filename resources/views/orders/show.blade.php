@@ -27,7 +27,16 @@
     <h3>Pembayaran</h3>
     <p>Kode Bayar: {{ $order->payment->payment_code }}</p>
     <p>Total: Rp {{ number_format($order->payment->amount, 0, ',', '.') }}</p>
-    <p>Status: {{ $order->payment->status }}</p>
+    <p>Status: <strong>{{ $order->payment->status }}</strong></p>
+    
+    @if($order->status === 'pending' && $order->payment->status === 'pending')
+    <a href="{{ route('payment.show', $order) }}">
+        <button>Bayar Sekarang</button>
+    </a>
+    @elseif($order->payment->status === 'paid')
+    <p style="color:green">✓ Pembayaran lunas pada {{ $order->payment->paid_at->format('d M Y, H:i') }}</p>
+    <p>Metode: {{ $order->payment->payment_method }}</p>
+    @endif
 
     <a href="{{ route('orders.index') }}">Riwayat Pesanan</a>
 </body>
