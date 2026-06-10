@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,4 +32,14 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
+
+    // Jadwal
+    Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
+    Route::get('/schedules/{schedule}', [ScheduleController::class, 'show'])->name('schedules.show');
+
+    // Order
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/create/{schedule}', [OrderController::class, 'create'])->name('orders.create');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 });
