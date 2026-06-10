@@ -38,6 +38,41 @@
     <p>Metode: {{ $order->payment->payment_method }}</p>
     @endif
 
+    @if($order->status === 'pending')
+    <hr>
+    <h3>Batalkan Pesanan</h3>
+
+    @if ($errors->any())
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li style="color:red">{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
+
+    <form method="POST" action="{{ route('orders.cancel', $order) }}"
+          onsubmit="return confirm('Yakin ingin membatalkan pesanan ini?')">
+        @csrf
+        @method('DELETE')
+        <div>
+            <label>Alasan Pembatalan (opsional)</label><br>
+            <textarea name="reason" rows="3" cols="40"
+                placeholder="Tulis alasan pembatalan...">{{ old('reason') }}</textarea>
+        </div>
+        <br>
+        <button type="submit" style="color:red">Batalkan Pesanan</button>
+    </form>
+    
+    @elseif($order->status === 'cancelled')
+    <hr>
+    <p style="color:red">
+        ✗ Pesanan dibatalkan pada {{ $order->cancelled_at->format('d M Y, H:i') }}
+    </p>
+    @if($order->cancellation_reason)
+        <p>Alasan: {{ $order->cancellation_reason }}</p>
+    @endif
+    @endif
+
     <a href="{{ route('orders.index') }}">Riwayat Pesanan</a>
 </body>
 </html>

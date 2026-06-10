@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Order\CancelOrderRequest;
 use App\Http\Requests\Order\StoreOrderRequest;
 use App\Models\Order;
 use App\Models\Payment;
@@ -141,5 +142,35 @@ class OrderController extends Controller
         } while (Payment::where('payment_code', $code)->exists());
 
         return $code;
+    }
+
+    public function cancel(CancelOrderRequest $request, Order $order): RedirectResponse
+    {
+    // Pastikan hanya pemilik order
+    abort_if($order->user_id !== auth()->id(), 403);
+
+    // Hanya order dengan status pending yang bisa dibatalkan
+    abort_if($order->status !== 'pending', 403, 'Pesanan tidak dapat dibatalkan.');
+
+    DB::transaction(function () use ($request, $order) {
+        // Update status order
+        $order->update([
+            'status'               => 'cancelled',
+            'cancellation_reason'  => $request->reason,
+            'cancelled_at'         => now(),
+        ]);
+
+        // Update status payment
+        $order->payment()->update([
+            'status' => 'failed',
+        ]);
+
+        // Kembalikan kursi ke jadwal
+        $order->schedule()->increment('available_seats', $order->total_passengers);
+    });
+
+    return redirect()
+        ->route('orders.index')
+        ->with('success', 'Pesanan berhasil dibatalkan.');
     }
 }

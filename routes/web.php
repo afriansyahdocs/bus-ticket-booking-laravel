@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/create/{schedule}', [OrderController::class, 'create'])->name('orders.create');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::delete('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
 
     // Payment
     Route::get('/orders/{order}/payment', [PaymentController::class, 'show'])->name('payment.show');

@@ -14,11 +14,13 @@ class Order extends Model
 
     protected $fillable = [
         'user_id', 'schedule_id', 'order_code',
-        'total_passengers', 'total_price', 'status', 'booked_at',
+        'total_passengers', 'total_price', 'status',
+        'booked_at', 'cancellation_reason', 'cancelled_at',
     ];
 
     protected $casts = [
         'booked_at' => 'datetime',
+        'cancelled_at' => 'datetime',
     ];
 
     public function user(): BelongsTo
